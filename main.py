@@ -1,8 +1,11 @@
+
+
+
 class Otdel(object):
     pass
 
-    def __init__(self, number, name, amount, wamount):
-        self.number = number
+    def __init__(self, name = 'Name', amount = 0, wamount = 0):
+        self._number = _next_number()
         self.name = name
         self.amount = amount
         self.wamount = wamount
@@ -13,18 +16,37 @@ class Otdel(object):
     def add(self, amount):
         self.amount += amount
 
+
+_next = 0
+
+def _next_number():
+    global _next
+    _next += 1
+    return  _next
+
+
+
 class Client(object):
 
-    def __init__(self, clientname, address, paymenttype):
+    def __init__(self, clientname = 'Name', address = 'Address' , paymenttype = 'Cash'):
         self.clientname = clientname
         self.address = address
         self.paymenttype = paymenttype
 
-    def changeadress(self, address):
+    def changeaddress(self, address):
         self.address = address
 
+
+    def test_changeaddress(self):
+        print(self.address)
+        address = raw_input('enter address')
+        #address = str(input('enter address'))
+        self.changeaddress(address)
+        print('new address is ' + ' ' + str(self.address))
+
+
 class Provider(object):
-    def __init__(self, name, address, country, typet, typep):
+    def __init__(self, name = 'Name', address = 'Address', country = 'Country', typet = 'Car', typep = 'Cash'):
         self.name = name
         self.address = address
         self.country = country
@@ -33,15 +55,16 @@ class Provider(object):
 
 
 class Tovar(object):
-    def __init__(self, name, otdel, seller, hr, expdate):
+    def __init__(self, name = 'Name', otdel = 'Otdel_0', provider = 'Provider', hr = '-15 ~ +2', expdate = ''):
         self.name = name
         self.otdel = otdel
-        self.seller = seller
+        self.provider = provider
         self.hr = hr
         self.expdate = expdate
 
+
 class Sell(object):
-    def __init__(self, client, tovar, date, time, amount, price):
+    def __init__(self, client = 'Name', tovar = 'Name', date = '', time = '', amount = 0, price = 0):
         self.client = client
         self.tovar = tovar
         self.date = date
@@ -52,29 +75,72 @@ class Sell(object):
     def add(self, amount):
         self.amount += amount
 
+    def remove(self, amount):
+        self.amount -= amount
+
+    def transfer_from(self, tovar, amount):
+        tovar.remove(amount)
+        self.add(amount)
+
+    def test_add(self):
+        amount = int(input('enter how much you want to add:' + ' '))
+        self.add(amount)
+        print('new amount =' + ' ' + str(self.amount))
+
+        
+
+
 if __name__ == '__main__':
-    o = Otdel(1, 'magazin', 6, 7)
-    print(o.name + ' ' + '-name before')
-    o.changename('nemagazin')
-    print(o.name + ' ' + '-name after')
-    print(o.amount)
-    o.add(50)
-    print(o.amount)
 
-    c = Client('Lala', 'old address', 'card')
-    print(c.address)
-    c.changeadress('new address')
-    print(c.address)
+    o1 = Otdel()
+    print(o1.name)
+    o2 = Otdel('new name', 2, 3)
+    print(o2.name)
+    o3 = Otdel(amount=2)
+    print(o3._number, o3.amount)
+    o4 = Otdel(wamount=2)
+    print(o4._number)
+    o5 = Otdel()
+    o5.add(30)
+    print(o5.amount)
 
-    p = Provider('sName', 'someaddress', 'somecountry', 'car', 'card')
-    print(p.typet)
+    c1 = Client()
+    print(c1.address)
+    c1.changeaddress('new address')
+    print(c1.address)
+
+    c2 = Client()
+    c2.test_changeaddress()
+
+    p1 = Provider('sName', 'someaddress', 'somecountry', 'car', 'card')
+    print(p1.country)
+    p2 = Provider(country='Lakaha')
+    print(p2.country)
+
 
     t = Tovar('Pizza', 1, 'FunnyPizza', 'hranit pri -10', '22.12.22')
     print(t.expdate)
+    t1 = Tovar(name = 'PizzaCool')
+    from datetime import date
+    t1.expdate = date.today()
+    print(t1.name +' '+ str(t1.expdate))
+
+
 
     s = Sell('client', 'sometovar', '20.10.22', '12:41', 3, 599)
-    s.add(6)
-    a = s.amount * s.price
+    from datetime import date
+    s.date = date.today()
+    print(s.date)
     print(s.amount)
-    print(a)
+    s.add(6)
+    print(s.amount)
 
+    s1 = Sell(amount=7)
+    print(s1.amount)
+    s.transfer_from(s1, 2)
+    print(s1.amount)
+    print(s.amount)
+
+    s2 = Sell(amount=100)
+    print(s2.amount)
+    s2.test_add()
