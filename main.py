@@ -114,7 +114,7 @@ if __name__ == '__main__':
 
     p1 = Provider('sName', 'someaddress', 'somecountry', 'car', 'card')
     print(p1.country)
-    p2 = Provider(country='Lakaha')
+    p2 = Provider(country='Lakahaha')
     print(p2.country)
 
 
